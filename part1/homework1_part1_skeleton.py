@@ -68,34 +68,29 @@ def reference_loop_source(chain_length):
 def homework_loop_sequential_source(chain_length, unroll_factor):
     function = "void homework_loop_sequential(float *b, int size) {"
 
-    # loop header
-    loop = "  for (int i = 0; i < size; i+="+str(unroll_factor)+") {"
-
     #implement me!
-    function_body = ""
+    function_body = []
 
-    # read the original value from memory
-    init = []
+    #header
+    function_body.append("  for (int i = 0; i < size; i+="+str(unroll_factor)+") {")
+
+    #var init
     for i in range(0,unroll_factor):
-        init.append("    float tmp"+str(i)+" = b[i+"+str(i)+"];")
+        function_body.append("    float tmp"+str(i)+" = b[i+"+str(i)+"];")
 
-    # create the dependency chain
-    chain = []
-    for i in range(0,chain_length):
-        for j in range(0,unroll_factor):
-            chain.append("    tmp"+str(j)+" += "+ str(i+1)+".0f;")
-        
-
-    # store the final value to memory
-    close = []
+    #sequential ordering
     for i in range(0,unroll_factor):
-        close.append("    b[i+"+str(i)+"] = tmp"+str(i)+";")
+        for j in range(0,chain_length):
+            function_body.append("    tmp"+str(i)+" += "+ str(j+1)+".0f;")
 
-    # close the loop
-    loop_close = "  }"
-    
+    #saving back to memory
+    for i in range(0,unroll_factor):
+        function_body.append("    b[i+"+str(i)+"] = tmp"+str(i)+";")
+
+    #closer for header
+    function_body.append("}")
     function_close = "}"
-    return "\n".join([function, loop, "\n".join(init), "\n".join(chain), "\n".join(close), loop_close, function_close])
+    return "\n".join([function, "\n".join(function_body), function_close])
 
 # Second homework function here! The specification for this
 # function is the same as the first homework function, except
@@ -112,9 +107,28 @@ def homework_loop_sequential_source(chain_length, unroll_factor):
 def homework_loop_interleaved_source(chain_length, unroll_factor):
     function = "void homework_loop_interleaved(float *b, int size) {"
     #implement me!
-    function_body = ""    
+    function_body = []
+
+    #header
+    function_body.append("  for (int i = 0; i < size; i+="+str(unroll_factor)+") {")
+
+    #var init
+    for i in range(0,unroll_factor):
+        function_body.append("    float tmp"+str(i)+" = b[i+"+str(i)+"];")
+
+    #interleaving of dependencies
+    for i in range(0,chain_length):
+        for j in range(0,unroll_factor):
+            function_body.append("    tmp"+str(j)+" += "+ str(i+1)+".0f;")
+
+    #saving back to memory
+    for i in range(0,unroll_factor):
+        function_body.append("    b[i+"+str(i)+"] = tmp"+str(i)+";")
+
+    #closer for header
+    function_body.append("}")
     function_close = "}"
-    return "\n".join([function, function_body, function_close])
+    return "\n".join([function, "\n".join(function_body), function_close])
 
 # String for the main function, including timings and
 # reference checks.
@@ -155,6 +169,12 @@ int main() {
   auto ref_stop = high_resolution_clock::now();
   auto ref_duration = duration_cast<nanoseconds>(ref_stop - ref_start);
   double ref_seconds = ref_duration.count()/1000000000.0;
+  //added for correctness check
+  int j = 0;
+  for(int i = 0; i < SIZE; i++){
+      assert(a[i] == c[i]);
+      assert(b[i] == c[i]);
+  }
 
   cout << "sequential loop time: " << sequential_seconds << endl; 
   cout << "interleaved loop time: " << interleaved_seconds << endl; 
