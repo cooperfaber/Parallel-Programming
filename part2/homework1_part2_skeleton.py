@@ -61,11 +61,29 @@ def homework_reduction_source(partitions):
     function = "void homework_reduction(reduce_type *a, int size) {"
     
     # implement me!
-    function_body = ""
+    function_body = []
+    function_body.append("  int delta_x = size/"+str(partitions)+";")
+    function_body.append("  for(int i = 1; i < delta_x; i++){")
+
+    #partition and sum to first memory location in partition
+    for i in range(0, partitions):
+        function_body.append("    a[delta_x*"+str(i)+"] += a[delta_x*"+str(i)+"+i];")
+
+    # closing brace for body
+    function_body.append("  }")
+
+    #cleanup (add all summed values to base memory location)
+
+    #loop header
+    function_body.append("  for(int i = 1; i < "+str(partitions)+"; i++){")
+    function_body.append("    a[0] += a[delta_x*i];")
+
+    # closing brace for cleaup loop
+    function_body.append("  }")
 
     # closing brace
     function_close = "}"
-    return "\n".join([function, function_body,function_close])
+    return "\n".join([function, "\n".join(function_body),function_close])
 
 # String for the main function, including timings and
 # reference checks.
