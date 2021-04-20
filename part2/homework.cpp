@@ -14,31 +14,17 @@ void reference_reduction(reduce_type *b, int size) {
   }
 }
 void homework_reduction(reduce_type *a, int size) {
-  int delta_x = size/16;
+  int delta_x = size/2;
   for(int i = 1; i < delta_x; i++){
     a[delta_x*0] += a[delta_x*0+i];
     a[delta_x*1] += a[delta_x*1+i];
-    a[delta_x*2] += a[delta_x*2+i];
-    a[delta_x*3] += a[delta_x*3+i];
-    a[delta_x*4] += a[delta_x*4+i];
-    a[delta_x*5] += a[delta_x*5+i];
-    a[delta_x*6] += a[delta_x*6+i];
-    a[delta_x*7] += a[delta_x*7+i];
-    a[delta_x*8] += a[delta_x*8+i];
-    a[delta_x*9] += a[delta_x*9+i];
-    a[delta_x*10] += a[delta_x*10+i];
-    a[delta_x*11] += a[delta_x*11+i];
-    a[delta_x*12] += a[delta_x*12+i];
-    a[delta_x*13] += a[delta_x*13+i];
-    a[delta_x*14] += a[delta_x*14+i];
-    a[delta_x*15] += a[delta_x*15+i];
   }
-  for(int i = 1; i < 16; i++){
+  for(int i = 1; i < 2; i++){
     a[0] += a[delta_x*i];
   }
 }
 
-#define SIZE (1024*1024*512)
+#define SIZE (1024*1024*16)
 
 
 int main() {
