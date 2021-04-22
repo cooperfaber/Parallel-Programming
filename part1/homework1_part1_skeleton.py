@@ -117,6 +117,7 @@ def homework_loop_interleaved_source(chain_length, unroll_factor):
         function_body.append("    float tmp"+str(i)+" = b[i+"+str(i)+"];")
 
     #interleaving of dependencies
+    #very similar to seqential, but with different ordering
     for i in range(0,chain_length):
         for j in range(0,unroll_factor):
             function_body.append("    tmp"+str(j)+" += "+ str(i+1)+".0f;")
