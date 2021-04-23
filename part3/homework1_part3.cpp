@@ -25,24 +25,24 @@ void robin_comp(volatile int *b, int tid, int thr_count){
 
 //attemped to combine unrolling from part 1 with multithreading
 void fancy_comp(volatile int *c, int tid, int thr_count){
-    for(int i = tid; i < 1024; i+= thr_count*16){
+    for(int i = tid*16; i < 1024; i+= thr_count*16){
         for(int j = 0; j < 524288; j++){
             c[i]++;
-            c[i+thr_count]++;
-            c[i+thr_count*2]++;
-            c[i+thr_count*3]++;
-            c[i+thr_count*4]++;
-            c[i+thr_count*5]++;
-            c[i+thr_count*6]++;
-            c[i+thr_count*7]++;
-            c[i+thr_count*8]++;
-            c[i+thr_count*9]++;
-            c[i+thr_count*10]++;
-            c[i+thr_count*11]++;
-            c[i+thr_count*12]++;
-            c[i+thr_count*13]++;
-            c[i+thr_count*14]++;
-            c[i+thr_count*15]++;
+            c[i+1]++;
+            c[i+2]++;
+            c[i+3]++;
+            c[i+4]++;
+            c[i+5]++;
+            c[i+6]++;
+            c[i+7]++;
+            c[i+8]++;
+            c[i+9]++;
+            c[i+10]++;
+            c[i+11]++;
+            c[i+12]++;
+            c[i+13]++;
+            c[i+14]++;
+            c[i+15]++;
         }
     }
 }   
