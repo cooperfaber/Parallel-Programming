@@ -20,13 +20,13 @@ class mutex {
   
   void lock(int thread_id) {
       for(int i = 1; i < threads; i++){
-            victim[i].store(thread_id);
             level[thread_id].store(i);
+            victim[i].store(thread_id);
             //spin loop
             for(int j = 0; j < threads; j++){
                 //for each level, see if there are threads above
                 if (j != thread_id)while(level[j].load() >= i && victim[i].load() == thread_id){
-                       // std::this_thread::yield();
+                    std::this_thread::yield();
                 }
             }
         }

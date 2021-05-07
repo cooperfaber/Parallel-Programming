@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
   cout << "total number: " << total_number << endl;
 
   for (int i = 0; i < num_threads; i++) {
-    cout << i << ":histogram: " << histogram[i] << endl;
+    cout << histogram[i] << endl;
   }
 
   // cleanup the memory

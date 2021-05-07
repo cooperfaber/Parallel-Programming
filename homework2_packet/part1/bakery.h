@@ -32,7 +32,7 @@ class mutex {
                 //if your label is a lower number, i'll wait
                 //if your label is the same as mine, but you got here first, i'll wait
                 //do i have to wait?
-                //std::this_thread::yield();
+                std::this_thread::yield();
             }
         } 
     }

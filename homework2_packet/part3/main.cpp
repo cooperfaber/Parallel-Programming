@@ -151,6 +151,7 @@ int main() {
   cout << "total pops: " << total_pops << endl;
   cout << "total pushes: " << total_pushes << endl;
   cout << "total peeks: " << total_peeks << endl;
+
   
 #if defined(SWAPTOP)
   cout << "total swaptops: " << total_swaptops << endl;

@@ -53,7 +53,7 @@ class rw_mutex {
             writer_cap++;
             writer_waiting.store(false);
         }
-        if(writer_cap.load() > 8){
+        if(writer_cap.load() > 4){
             writer_decider = false;
             writer_cap.store(0);
         }
