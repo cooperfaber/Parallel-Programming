@@ -26,7 +26,7 @@ class mutex {
             for(int j = 0; j < threads; j++){
                 //for each level, see if there are threads above
                 if (j != thread_id)while(level[j].load() >= i && victim[i].load() == thread_id){
-                    std::this_thread::yield();
+                    //std::this_thread::yield();
                 }
             }
         }
