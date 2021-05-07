@@ -20,13 +20,9 @@ class mutex {
   }
   
   void lock(int thread_id) {
+
     flag[thread_id].store(true);
-    int max = 0;
-    for(int i = 0; i < threads; i++){
-        int temp = label[i].load();
-        if (temp > max) max = temp;
-    }
-    label[thread_id].store(max+1);
+    label[thread_id].store(getMax());
     //spin loop
     for(int j = 0; j < threads; ++j){
         //for each level, see if there threads waiting with lower numbers
@@ -44,6 +40,15 @@ class mutex {
   
   void unlock(int thread_id) {
       flag[thread_id].store(false);
+  }
+
+  int getMax(){
+    int max = 0;
+    for(int i = 0; i < threads; i++){
+        int temp = label[i].load();
+        if (temp > max) max = temp;
+    }
+    return max+1;
   }
 
  private:

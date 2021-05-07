@@ -20,8 +20,8 @@ class mutex {
   
   void lock(int thread_id) {
       for(int i = 1; i < threads; i++){
-            level[thread_id].store(i);
             victim[i].store(thread_id);
+            level[thread_id].store(i);
             //spin loop
             for(int j = 0; j < threads; j++){
                 //for each level, see if there are threads above
