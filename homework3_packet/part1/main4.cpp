@@ -48,6 +48,14 @@ int main() {
   for (int i = 0; i < SIZE; i++) {
     a[i] = 0.5 + i;
   }
+  float *b = new float[SIZE];
+  for (int i = 0; i < SIZE; i++) {
+    b[i] = a[i];
+  }
+  bool output_bool = false;
+  for (int i = 0; i < SIZE; i++) {
+    b[i] = cos(b[i]);
+  }
   auto start = std::chrono::high_resolution_clock::now();
   int duration = 0.0;
   std::thread memory_thread(memory_thread_func,a,SIZE);
@@ -59,6 +67,13 @@ int main() {
   duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
   std::cout << "Time: " << duration << "s" << std::endl; 
 
-  
+    //extra check
+  for (int i = 0; i < SIZE; i++) {
+    if(a[i] != b[i] && !output_bool){
+        std::cout << "rip at i = " << i << " " << a[i] << " vs " << b[i] << std::endl;
+        output_bool = true;
+    }
+  }
+  if(!output_bool)std::cout << "correct order" << std::endl;
   return 0;
 }

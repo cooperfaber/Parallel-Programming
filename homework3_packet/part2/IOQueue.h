@@ -41,8 +41,10 @@ class IOQueue {
         return -1;
       }
       else{
+          //31 atomic operations cried out and were silenced
+          int tmp = atomic_fetch_add(&tail,32);
           for(int i = 0; i < 32; i++){
-              ret[i] = buffer[atomic_fetch_add(&tail,1)];
+              ret[i] = buffer[tmp+i];
           }
           //success
           return 0;

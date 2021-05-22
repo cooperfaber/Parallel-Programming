@@ -22,11 +22,10 @@ class CQueue {
   }
 
   void enq_8(float e[8]) {
-      for(int i = 0; i < 8; i++){
-        //put full queue check in loop body
-        while((tail.load() == head.load()+1) || size() >= CQUEUE_SIZE-1){
+        while(tail.load() == head.load()+8){
             //queue full, wait
         }
+      for(int i = 0; i < 8; i++){
         buffer[head.load()] = e[i];
         head.store((head.load()+1)%CQUEUE_SIZE);
       }
@@ -36,7 +35,6 @@ class CQueue {
   float deq() {
     while((size() == 0) || head.load() == tail.load()){
         //empty queue, wait
-        //std::cout << "waiting" << std::endl;
     }
     float retval = buffer[tail.load()];
     tail.store((tail.load()+1)%CQUEUE_SIZE);
@@ -44,10 +42,10 @@ class CQueue {
   }
 
   void deq_8(float e[8]) {
+    while((size() < 8)){
+        //empty queue, wait
+    }
     for(int i = 0; i < 8; i++){
-        while((size() == 0) || head.load() == tail.load()){
-            //empty queue, wait
-        }
         e[i] = buffer[tail.load()];
         tail.store((tail.load()+1)%CQUEUE_SIZE);
     }
