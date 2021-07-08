@@ -96,8 +96,5 @@ int main(int argc, char *argv[]) {
   std::cout << "timings: " << time_seconds << std::endl;
 
   repeated_blur_nobar(input2, output2, SIZE, REPEATS);
-  for(int i = 0; i < SIZE; i++){
-      if(input[i]!=input2[i])std::cout << input[i] << "==" << input2[i] << std::endl;
-  }  
       
 }

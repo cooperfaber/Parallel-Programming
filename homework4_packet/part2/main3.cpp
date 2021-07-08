@@ -10,12 +10,18 @@ barrier_object B;
 
 atomic_int x(0);
 atomic_int y(0);
-void t0_function() {
-  // complete me!
+void t0_function(int* output) {
+    B.barrier(0);
+    x.store(1,memory_order_seq_cst);
+    *output = y.load(memory_order_seq_cst);
+    B.barrier(0);
 }
 
-void t1_function() {
-  // complete me!
+void t1_function(int* output) {
+    B.barrier(1);
+    y.store(1,memory_order_seq_cst);
+    *output = x.load(memory_order_seq_cst);
+    B.barrier(1);
 }
 
 
@@ -25,36 +31,49 @@ int main() {
   int output1 = 0;
   int output2 = 0;
   int output3 = 0;
+
   B.init(2);
 
+  int xval = 0;
+  int yval = 0;
+
+  std::thread threads[2];
   for (int i = 0; i < TEST_ITERATIONS; i++) {
     // Run a test iteration
-
+    threads[0] = std::thread(t0_function,&yval);
+    threads[1] = std::thread(t1_function,&xval);
+    for(int i = 0; i < 2; i++){
+        threads[i].join();
+    }
     // Record a histogram, fill in the conditions
     
-    if (false) {
+    if ((xval == 1)&&(yval==1)) {
       output0++;
     }
-    else if (false) {
+    else if ((xval == 0)&&(yval==1)) {
       output1++;
     }
-    else if (false) {
+    else if ((xval == 1)&&(yval==0)) {
       output2++;
     }
 
     // This should be the relaxed behavior
-    else if (false) {
+    else if ((xval == yval)&&(yval==0)) {
       output3++;
     }
+    //rejoin threads
 
+    //reset conditionals
+    x.store(0);
+    y.store(0);
   }
 
   // Complete the print out using your output instantiations
   cout << "histogram of different observations:" << endl;
-  cout << "output0: <FILL IN OUTPUT> " << output0 << endl;
-  cout << "output1: <FILL IN OUTPUT> " << output1 << endl;
-  cout << "output2: <FILL IN OUTPUT> " << output2 << endl;
-  cout << "output3: <FILL IN OUTPUT> " << output3 << endl << endl;
+  cout << "output0: both 1 " << output0 << endl;
+  cout << "output1: x: 0, y: 1 " << output1 << endl;
+  cout << "output2: x: 1, y: 0 " << output2 << endl;
+  cout << "output3: both 0 " << output3 << endl << endl;
   cout << "relaxed behavior frequency: " << float(output3)/float(TEST_ITERATIONS) << endl;
   
   return 0;

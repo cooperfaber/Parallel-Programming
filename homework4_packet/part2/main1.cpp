@@ -8,13 +8,13 @@ using namespace std;
 atomic_int x(0);
 atomic_int y(0);
 void t0_function(int* output) {
-    x.store(1);
+    x.store(1,memory_order_relaxed);
     *output = y.load(memory_order_relaxed);
     
 }
 
 void t1_function(int* output) {
-    y.store(1);
+    y.store(1,memory_order_relaxed);
     *output = x.load(memory_order_relaxed);
 }
 

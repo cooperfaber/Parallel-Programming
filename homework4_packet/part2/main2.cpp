@@ -12,16 +12,16 @@ atomic_int x(0);
 atomic_int y(0);
 void t0_function(int* output) {
     B.barrier(0);
-    x.store(1);
+    x.store(1,memory_order_relaxed);
     *output = y.load(memory_order_relaxed);
-    //B.barrier(0);
+    B.barrier(0);
 }
 
 void t1_function(int* output) {
     B.barrier(1);
-    y.store(1);
+    y.store(1,memory_order_relaxed);
     *output = x.load(memory_order_relaxed);
-    //B.barrier(1);
+    B.barrier(1);
 }
 
 
